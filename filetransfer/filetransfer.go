@@ -9,6 +9,8 @@ import (
 	"github.com/claudiodangelis/qrcp/config"
 	"github.com/claudiodangelis/qrcp/payload"
 	"github.com/claudiodangelis/qrcp/server"
+
+	"github.com/claudiodangelis/qrcp/application"
 )
 
 func SendFiles(expl *explorer.Explorer) string {
@@ -21,10 +23,10 @@ func SendFiles(expl *explorer.Explorer) string {
 }
 
 func ReceiveFiles(receiveUrlChannel, outputDirChannel chan string) {
-	cfg, err := config.New("", config.Options{})
-	if err != nil {
-		log.Fatal(err)
-	}
+	app := application.New()
+
+	cfg := config.New(app)
+
 	cfg.Output = getDownloadPath()
 	srv, err := server.New(&cfg)
 	if err != nil {
@@ -66,7 +68,11 @@ func createServer(filepaths []string) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	cfg, err := config.New("", config.Options{})
+
+	app := application.New()
+
+	cfg := config.New(app)
+
 	if err != nil {
 		log.Fatal(err)
 	}
